@@ -1,0 +1,18 @@
+# Render Blueprint — deploys the SMS-forwarder backend as a web service.
+# In Render: New + → Blueprint → connect this repo. Render reads this file.
+services:
+  - type: web
+    name: sms-forwarder-backend
+    runtime: node
+    region: singapore          # closest Render region to Pakistan
+    plan: free                 # note: free instances sleep after 15 min idle
+    rootDir: .
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: SHARED_SECRET
+        sync: false            # set this yourself in the Render dashboard
+      - key: NODE_VERSION
+        value: "22"
